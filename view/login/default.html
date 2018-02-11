@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es" >
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <title>Fortec</title>
+   <meta name="description" content="Fortec es una base de datos con soluciones de averías para el técnico profesional" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+   <link rel="shortcut icon" href="{#FS_PATH#}view/img/favicon.ico" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/bootstrap-yeti.min.css" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/font-awesome.min.css" />
+   <script type="text/javascript" src="{#FS_PATH#}view/js/jquery.min.js"></script>
+   <script type="text/javascript" src="{#FS_PATH#}view/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="{#FS_PATH#}view/js/jquery.ui.shake.js"></script>
+   <script type="text/javascript">
+      $(document).ready(function() {
+         {if="$fsc->get_errors()"}
+         $("#box_login").shake();
+         {/if}
+         
+         document.f_login.user.focus();
+         
+         $("#b_feedback").click(function(event) {
+            event.preventDefault();
+            $("#modal_feedback").modal('show');
+            document.f_feedback.feedback_text.focus();
+         });
+         $("#b_new_password").click(function(event) {
+            event.preventDefault();
+            $("#modal_new_password").modal('show');
+            document.f_new_password.user.focus();
+         });
+      });
+   </script>
+</head>
+<body>
+   <nav class="navbar navbar-default" role="navigation" style="margin: 0px;">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">Menú</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.php">
+               <span class="glyphicon glyphicon-lock"></span>&nbsp; Fortec
+            </a>
+         </div>
+         
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+               <li>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Ayuda">
+                     <span class="glyphicon glyphicon-question-sign hidden-xs"></span>
+                     <span class="visible-xs">Ayuda</span>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <li>
+                        <a href="http://www.forotecnico.org/forumdisplay.php?f=13" target="_blank">
+                           <i class="fa fa-book" aria-hidden="true"></i>&nbsp; Cómo ser miembro
+                        </a>
+                     </li>
+                     <li>
+                        <a href="http://www.forotecnico.org" target="_blank">
+                           <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; Foro
+                        </a>
+                     </li>
+                     <li>
+                        <a href="http://www.forotecnico.org/forumdisplay.php?f=40" target="_blank">
+                           <i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; Preguntas
+                        </a>
+                     </li>
+                     <li>
+                        <a href="http://www.forotecnico.org/showthread.php?t=2" target="_blank">
+                           <i class="fa fa-bug" aria-hidden="true"></i>&nbsp; Condiciones y requisitos
+                        </a>
+                     </li>
+                     <li>
+                        <a href="http://www.forotecnico.org/showthread.php?t=3" target="_blank">
+                           <i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp; Ayuda
+                        </a>
+                     </li>
+                     <li class="divider"></li>
+                     <li><a href="http://www.tiznajo.com/content/consultar" target="_blank"><span class="glyphicon glyphicon-send"></span>&nbsp; Contactar...</a></li>
+                  </ul>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </nav>
+   
+   {if="$fsc->get_errors()"}
+   <div class="alert alert-danger">
+      <ul>{loop="$fsc->get_errors()"}<li>{$value}</li>{/loop}</ul>
+   </div>
+   {/if}
+   {if="$fsc->get_messages()"}
+   <div class="alert alert-success">
+      <ul>{loop="$fsc->get_messages()"}<li>{$value}</li>{/loop}</ul>
+   </div>
+   {/if}
+   {if="$fsc->get_advices()"}
+   <div class="alert alert-info">
+      <ul>{loop="$fsc->get_advices()"}<li>{$value}</li>{/loop}</ul>
+   </div>
+   {/if}
+   
+   <form name="f_login" action="index.php?nlogin={$nlogin}" method="post" class="form" role="form">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+               <div class="page-header">
+                  <h1>
+                     <span class="glyphicon glyphicon-user"></span> &nbsp; Iniciar sesión
+                  </h1>
+               </div>
+               <div class="well well-sm">
+                  <br/>
+                  <div class="container-fluid">
+                     <div class="row">
+                        <div class="col-sm-5">
+                           <div class="thumbnail hidden-xs">
+                              {if="file_exists(FS_MYDOCS.'images/logo.png')"}
+                              <img src="images/logo.png" alt="{$fsc->empresa->nombre}"/>
+                              {elseif="file_exists(FS_MYDOCS.'images/logo.jpg')"}
+                              <img src="images/logo.jpg" alt="{$fsc->empresa->nombre}"/>
+                              {else}
+                              <img src="plugins/login_fortec/view/img/fortec.png" alt="login"/>
+                              {/if}
+                           </div>
+                        </div>
+                        <div class="col-sm-7">
+                           <div class="form-group">
+                              <input type="text" name="user" class="form-control input-lg" maxlength="12" placeholder="Usuario" autocomplete="off"/>
+                           </div>
+                           <div class="form-group">
+                              <input type="password" class="form-control input-lg" name="password" maxlength="32" placeholder="Contraseña"/>
+                              <p class="help-block">
+                                 <a href="#" id="b_new_password">¿Has olvidado la contraseña?</a>
+                              </p>
+                           </div>
+                           <button class="btn btn-block btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                              <span class="glyphicon glyphicon-log-in"></span>&nbsp; Iniciar sesión
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   
+   <div class="visible-md visible-lg" style="margin-bottom: 100px;"></div>
+   
+   <div class="modal" id="modal_new_password">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <form name="f_new_password" action="index.php" method="post" class="form" role="form">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span>
+                  </button>
+                  <h4 class="modal-title">¿Has olvidado la contraseña?</h4>
+               </div>
+               <div class="modal-body">
+                  <div class="form-group">
+                     <label>Usuario</label>
+                     <input type="text" name="user" class="form-control" maxlength="12" placeholder="Usuario" autocomplete="off"/>
+                  </div>
+                  <div class="form-group">
+                     <label>Nueva contraseña</label>
+                     <input type="password" class="form-control" name="new_password" maxlength="32" placeholder="Nueva contraseña" required=""/>
+                     <input type="password" class="form-control" name="new_password2" maxlength="32" placeholder="Repite la nueva contraseña" required=""/>
+                  </div>
+                  <div class="form-group">
+                     <label>Contraseña de la base de datos</label>
+                     <input type="password" class="form-control" name="db_password" placeholder="Contraseña de la base de datos"/>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="submit" class="btn btn-sm btn-warning">
+                     <span class="glyphicon glyphicon-wrench"></span>&nbsp; Cambiar
+                  </button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   
+   {include="correo_login"}
+   
+   <hr style="margin-top: 50px;"/>
+   
+   <div class="container-fluid" style="margin-bottom: 10px;">
+      <div class="row">
+         {if="FS_DB_HISTORY"}
+         <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="panel panel-default">
+               <div class="panel-heading">
+                  <h3 class="panel-title">Consultas SQL:</h3>
+               </div>
+               <div class="panel-body">
+                  <ol style="font-size: 11px; margin: 0px; padding: 0px 0px 0px 20px;">
+                  {loop="$fsc->get_db_history()"}<li>{$value}</li>{/loop}
+                  </ol>
+               </div>
+            </div>
+         </div>
+         {/if}
+      </div>
+     
+   </div>
+</body>
+</html>
